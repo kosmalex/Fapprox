@@ -36,7 +36,7 @@ end
 MAX_ITER = 100;
 Sol_buffer = cell([1, MAX_ITER]);
 sol_counter = zeros(1, MAX_ITER); 
-for l =1:10
+for l=1:MAX_ITER
     l %for referance.
     
     step = 3; %Increment step of the neuron number
