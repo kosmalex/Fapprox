@@ -3,7 +3,7 @@ clc;
 warning('off','all'); %Get rid of the annoying "new_ff" warning, about
                         %it being used in an obsolete way
 
-tot_samples = 300;
+tot_samples = 200;
 
 %For cross-validation
 ts_size = .8 * tot_samples;
