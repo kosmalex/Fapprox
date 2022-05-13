@@ -1,6 +1,7 @@
 %RUN.m MAIN FIRST
 
 clc;
+close;
 warning('off','all'); %Get rid of the annoying "new_ff" warning, about
                         %it being used in an obsolete way
 
@@ -20,11 +21,3 @@ legend('predicted value', 'actual value');
 ylabel('f', 'fontsize',16)
 xlabel('x', 'fontsize',16)
 grid;
-
-plotconfusion(Target_buffer, resp_a)
-plotroc(Target_buffer, resp_a)
-plotregression(Target_buffer, resp_a)
-ploterrhist(Target_buffer - resp_a, 'bins', 30)
-
-
-

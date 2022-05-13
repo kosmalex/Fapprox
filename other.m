@@ -1,10 +1,11 @@
 %RUN.m MAIN FIRST
 
 clc;
+close;
 warning('off','all'); %Get rid of the annoying "new_ff" warning, about
                         %it being used in an obsolete way
 
-%As derived from main best sol is:
+%As derived from main best sol is: (This is not final a better solution may exist)
 net_b = newff(minmax(Input_buffer), [8 1], {'tansig', 'purelin'}, 'traingd');
 net_b.trainParam.show = 50;
 net_b.trainParam.lr = 0.01;
@@ -21,16 +22,11 @@ resp_b2 = sim(net2, vs_input);
 resp_b3 = sim(net3, Input_buffer);
 
 figure;
-plotconfusion(Target_buffer, resp_b3)
-
-figure;
-plotroc(Target_buffer, resp_b3)
-
-figure;
 plotregression(Target_buffer, resp_b3)
 
 e1 = ts_target - resp_b1;
 e2 = vs_target - resp_b2;
 e3 = Target_buffer - resp_b3;
 
+figure;
 ploterrhist(e1, 'training', e2, 'validation', e3, 'testing')

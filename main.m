@@ -1,5 +1,6 @@
 clear;
 clc;
+close;
 warning('off','all'); %Get rid of the annoying "new_ff" warning, about
                         %it being used in an obsolete way
 
@@ -11,32 +12,19 @@ vs_size = .2 * tot_samples;
 
 f = @(x, y, z) z.^2 + x.^3 - 2*x.*cos(y.*z + 4); %The function to be approximated
 
-Input_buffer = zeros(3, tot_samples); %Initialize input buffer with 0s and fill it with uniformly
-for index = 1:length(Input_buffer)     %distributed values ranging from [-1, 1]
-    Input_buffer(:, index) = -1 * (1 - rand(1, 3)) + rand(1, 3) * 1;
-end
-
-Target_buffer = zeros(1, tot_samples); %Calculate the corresponding targets to the above inputs
-for index = 1:length(Input_buffer)
-    %It's pretier with x, y, z
-    x = Input_buffer(1, index);
-    y = Input_buffer(2, index);
-    z = Input_buffer(3, index);
-
-    Target_buffer(:, index) = f(x, y, z);
-end
+%generate input output pairs
+[Input_buffer, Target_buffer] = genData(f);
 
 %80percent of data is used as training set
 %20percent of data is used as validation set
 [ts_input, ts_target] = randFill(Input_buffer, Target_buffer, ts_size); 
 [vs_input, vs_target] = randFill(Input_buffer, Target_buffer, vs_size);
 
-
 %<Cross Validation>
 MAX_ITER = 100;
 Sol_buffer = cell([1, MAX_ITER]);
 sol_counter = zeros(1, MAX_ITER); 
-for l=1:MAX_ITER
+for l =1:MAX_ITER
     l %for referance.
     
     step = 3; %Increment step of the neuron number
@@ -125,14 +113,17 @@ finSol = Sol_buffer{maxIdx};
 %<Extract Solution/>
 
 %Train the network of the final solution
-net = newff(minmax(Input_buffer), finSol{1}, finSol{2}, 'traingd');
-net.trainParam.show = 50;
-net.trainParam.lr = 0.01;
-net.trainParam.epochs = 1000; 
-net.trainParam.goal = 1e-5;
+neural_net = newff(minmax(Input_buffer), finSol{1}, finSol{2}, 'traingd');
+neural_net.trainParam.show = 50;
+neural_net.trainParam.lr = 0.01;
+neural_net.trainParam.epochs = 1000; 
+neural_net.trainParam.goal = 1e-5;
 
 %Use all the data now that the net's structure was finilized
-finNet = train(net, Input_buffer, Target_buffer); 
+finNet = train(neural_net, Input_buffer, Target_buffer);
+
+%generate new input data only, and sim the network
+[Input_buffer, Target_buffer] = genData(f);
 resp = sim(finNet, Input_buffer);
 
 %Show results of the networks performance
