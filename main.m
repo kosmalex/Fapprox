@@ -134,6 +134,9 @@ neural_net.trainParam.lr = 0.01;
 neural_net.trainParam.epochs = 1000; 
 neural_net.trainParam.goal = 1e-5;
 
+%Show final solution
+view(neural_net);
+
 %Use all the data now that the net's structure was finilized
 finNet = train(neural_net, Input_buffer, Target_buffer);
 
